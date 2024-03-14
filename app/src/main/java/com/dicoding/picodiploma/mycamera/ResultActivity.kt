@@ -41,27 +41,29 @@ class ResultActivity : AppCompatActivity() {
     private fun translateText(detectedText: String?) {
         val options = TranslatorOptions.Builder().setSourceLanguage(TranslateLanguage.ENGLISH)
             .setTargetLanguage(TranslateLanguage.INDONESIAN).build()
-        val indonesiaEnglishTranslator = Translation.getClient(options)
+        val indonesianEnglishTranslator = Translation.getClient(options)
 
-        val conditions = DownloadConditions.Builder().requireWifi().build()
-        indonesiaEnglishTranslator.downloadModelIfNeeded(conditions).addOnSuccessListener {
-            indonesiaEnglishTranslator.translate(detectedText.toString())
-                .addOnSuccessListener { translatedText ->
-                    binding.translatedText.text = translatedText
-                    indonesiaEnglishTranslator.close()
-                    binding.progressIndicator.visibility = View.GONE
-                }.addOnFailureListener { exception ->
-                showToast(exception.message.toString())
-                print(exception.stackTrace)
-                indonesiaEnglishTranslator.close()
+        val conditions = DownloadConditions.Builder().build()
+        indonesianEnglishTranslator.downloadModelIfNeeded(conditions)
+            .addOnSuccessListener {
+                indonesianEnglishTranslator.translate(detectedText.toString())
+                    .addOnSuccessListener { translatedText ->
+                        binding.translatedText.text = translatedText
+                        indonesianEnglishTranslator.close()
+                        binding.progressIndicator.visibility = View.GONE
+                    }
+                    .addOnFailureListener { exception ->
+                        showToast(exception.message.toString())
+                        print(exception.stackTrace)
+                        indonesianEnglishTranslator.close()
+                        binding.progressIndicator.visibility = View.GONE
+                    }
+            }
+            .addOnFailureListener { exception ->
+                showToast(getString(R.string.downloadModelFail))
                 binding.progressIndicator.visibility = View.GONE
             }
-        }.addOnFailureListener { exception ->
-            showToast(getString(R.string.downloadModelFail))
-            binding.progressIndicator.visibility = View.GONE
-
-        }
-        lifecycle.addObserver(indonesiaEnglishTranslator)
+        lifecycle.addObserver(indonesianEnglishTranslator)
     }
 
     private fun showToast(message: String) {

@@ -18,7 +18,6 @@ import com.dicoding.picodiploma.mycamera.databinding.ActivityMainBinding
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
 class MainActivity : AppCompatActivity() {
@@ -120,12 +119,12 @@ class MainActivity : AppCompatActivity() {
         val inputImage = InputImage.fromFilePath(this, uri)
         textRecognizer.process(inputImage)
             .addOnSuccessListener { visionText: Text ->
-                val detecedText: String = visionText.text
-                if (detecedText.isNotBlank()) {
+                val detectedText: String = visionText.text
+                if (detectedText.isNotBlank()) {
                     binding.progressIndicator.visibility = View.GONE
                     val intent = Intent(this, ResultActivity::class.java)
                     intent.putExtra(ResultActivity.EXTRA_IMAGE_URI, uri.toString())
-                    intent.putExtra(ResultActivity.EXTRA_RESULT, detecedText)
+                    intent.putExtra(ResultActivity.EXTRA_RESULT, detectedText)
                     startActivity(intent)
 
                 } else {
